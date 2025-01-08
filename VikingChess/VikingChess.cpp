@@ -47,7 +47,8 @@ void initializeBoard()
     board[9][5] = ATTACKER_PIECE;
 }
 
-void printBoard() {
+void printBoard() 
+{
     cout << "   ";
     for (int i = 0; i < BOARD_SIZE; i++) 
     {
@@ -55,13 +56,15 @@ void printBoard() {
         cout << cordinate << " ";
     }
     cout << endl;
-    for (int i = 0; i < BOARD_SIZE; i++) {
+    for (int i = 0; i < BOARD_SIZE; i++) 
+    {
         cout << i + 1 << " ";
         if (i + 1< 10)
         {
             cout << " ";
         }
-        for (int j = 0; j < BOARD_SIZE; j++) {
+        for (int j = 0; j < BOARD_SIZE; j++) 
+        {
             cout << board[i][j] << " ";
         }
         cout << endl;
