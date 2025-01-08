@@ -47,31 +47,17 @@ void initializeBoard()
     board[9][5] = ATTACKER_PIECE;
 }
 
-void printBoard() {
-    cout << "   ";
-    for (int i = 0; i < BOARD_SIZE; i++) 
-    {
-        char cordinate = 'A' + i;
-        cout << cordinate << " ";
-    }
-    cout << endl;
-    for (int i = 0; i < BOARD_SIZE; i++) {
-        cout << i + 1 << " ";
-        if (i + 1< 10)
-        {
-            cout << " ";
-        }
-        for (int j = 0; j < BOARD_SIZE; j++) {
-            cout << board[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
-
 int main()
 {
     initializeBoard();
-    printBoard();
+    for (int i = 0; i < 11; i++)
+    {
+        for (int j = 0; j < 11; j++)
+        {
+            cout << board[i][j];
+        }
+        cout << endl;
+    }
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
