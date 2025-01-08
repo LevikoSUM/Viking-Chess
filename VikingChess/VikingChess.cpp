@@ -71,10 +71,62 @@ void printBoard()
     }
 }
 
+bool isValidMove(int startX, int startY, int endX, int endY) 
+{
+    if (endX < 0 || endX >= BOARD_SIZE || endY < 0 || endY >= BOARD_SIZE) return false; // Out of bounds
+    if (board[endX][endY] != EMPTY) return false; // Destination not empty
+    if (board[startX][startY] == EMPTY) return false; // Not a piece
+    if (startX != endX && startY != endY) return false; // Only straight moves allowed
+
+    int directionX = (endX > startX) - (endX < startX);
+    int directionY = (endY > startY) - (endY < startY);
+
+    int currentX = startX + directionX;
+    int currentY = startY + directionY;
+    while (currentX != endX || currentY != endY) 
+    {
+        if (board[currentX][currentY] != EMPTY) return false; // Cannot jump over other pieces
+        currentX += directionX;
+        currentY += directionY;
+    }
+
+    return true;
+}
+
+void makeMove(int startX, int startY, int endX, int endY) 
+{
+    if (isValidMove(startX, startY, endX, endY)) 
+    {
+        char piece = board[startX][startY];
+        board[startX][startY] = EMPTY;
+        board[endX][endY] = piece;
+        cout << "Moved piece from (" << startX + 1 << ", " << startY + 1 << ") to (" << endX + 1 << ", " << endY + 1 << ")." << endl;
+    }
+    else 
+    {
+        cout << "Invalid move. Try again." << endl;
+    }
+}
+
 int main()
 {
     initializeBoard();
     printBoard();
+
+    char command[10];
+    while (true) 
+    {
+        cout << "> ";
+        cin >> command;
+
+        if (command[0] == 'm' && command[1] == 'o' && command[2] == 'v' && command[3] == 'e')
+        {
+            int startX, startY, endX, endY;
+            cin >> startX >> startY >> endX >> endY;
+            makeMove(startX - 1, startY - 1, endX - 1, endY - 1);
+            printBoard();
+        }
+    }
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
