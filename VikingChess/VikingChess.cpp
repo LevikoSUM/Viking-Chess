@@ -49,16 +49,16 @@ void initializeBoard()
 
 void printBoard()
 {
-	for (int i = 0; i < BOARD_SIZE; ++i)
+	for (int i = 0; i < BOARD_SIZE; i++)
 	{
 		cout << "    ";
-		for (int j = 0; j < BOARD_SIZE; ++j)
+		for (int j = 0; j < BOARD_SIZE; j++)
 		{
 			cout << "+-------";
 		}
 		cout << "+" << endl;
 
-		for (int rowPart = 0; rowPart < 3; ++rowPart)
+		for (int rowPart = 0; rowPart < 3; rowPart++)
 		{
 			if (rowPart == 1)
 			{
@@ -77,7 +77,7 @@ void printBoard()
 				cout << "    ";
 			}
 
-			for (int j = 0; j < BOARD_SIZE; ++j)
+			for (int j = 0; j < BOARD_SIZE; j++)
 			{
 				if (rowPart == 1 && board[i][j] != ' ')
 				{
@@ -96,7 +96,7 @@ void printBoard()
 
 
 	cout << "    ";
-	for (int j = 0; j < BOARD_SIZE; ++j)
+	for (int j = 0; j < BOARD_SIZE; j++)
 	{
 		cout << "+-------";
 	}
@@ -104,7 +104,7 @@ void printBoard()
 
 
 	cout << "    ";
-	for (int j = 0; j < BOARD_SIZE; ++j)
+	for (int j = 0; j < BOARD_SIZE; j++)
 	{
 		if (j + 1 < 10)
 		{
