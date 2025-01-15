@@ -118,12 +118,14 @@ void printBoard()
 	cout << endl;
 }
 
-bool isValidMove(int startX, int startY, int endX, int endY)
+bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter)
 {
 	if (endX < 0 || endX >= BOARD_SIZE || endY < 0 || endY >= BOARD_SIZE) return false; // Out of bounds
 	if (board[endX][endY] != EMPTY) return false; // Destination not empty
 	if (board[startX][startY] == EMPTY) return false; // Not a piece
 	if (startX != endX && startY != endY) return false; // Only straight moves allowed
+	if (moveCounter % 2 == 1 && board[startX][startY] != ATTACKER_PIECE) return false; // Can't move defender and king on attacker turn
+	if (moveCounter % 2 == 0 && board[startX][startY] == ATTACKER_PIECE) return false; // Can't move attacker on defender turn
 
 	int directionX = (endX > startX) - (endX < startX);
 	int directionY = (endY > startY) - (endY < startY);
@@ -140,14 +142,15 @@ bool isValidMove(int startX, int startY, int endX, int endY)
 	return true;
 }
 
-void makeMove(int startX, int startY, int endX, int endY)
+void makeMove(int startX, int startY, int endX, int endY, int& moveCounter)
 {
-	if (isValidMove(startX, startY, endX, endY))
+	if (isValidMove(startX, startY, endX, endY, moveCounter))
 	{
 		char piece = board[startX][startY];
 		board[startX][startY] = EMPTY;
 		board[endX][endY] = piece;
 		cout << "Moved piece from (" << startX + 1 << ", " << startY + 1 << ") to (" << endX + 1 << ", " << endY + 1 << ")." << endl;
+		moveCounter++;
 	}
 	else
 	{
@@ -160,6 +163,8 @@ int main()
 	initializeBoard();
 	printBoard();
 
+	int moveCounter = 1;
+
 	char command[10];
 	while (true)
 	{
@@ -170,7 +175,7 @@ int main()
 		{
 			int startX, startY, endX, endY;
 			cin >> startX >> startY >> endX >> endY;
-			makeMove(startX - 1, startY - 1, endX - 1, endY - 1);
+			makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter);
 			printBoard();
 		}
 	}
