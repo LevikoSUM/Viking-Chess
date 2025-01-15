@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A';
+const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A', CORNER = 'X';
 int BOARD_SIZE = 11;
 char board[11][11];
 
@@ -45,6 +45,11 @@ void initializeBoard()
 	board[1][5] = ATTACKER_PIECE;
 	board[5][9] = ATTACKER_PIECE;
 	board[9][5] = ATTACKER_PIECE;
+	board[0][0] = CORNER;
+	board[0][10] = CORNER;
+	board[10][0] = CORNER;
+	board[10][10] = CORNER;
+
 }
 
 void printBoard()
@@ -122,7 +127,7 @@ bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter)
 {
 	if (endX < 0 || endX >= BOARD_SIZE || endY < 0 || endY >= BOARD_SIZE) return false; // Out of bounds
 	if (board[endX][endY] != EMPTY) return false; // Destination not empty
-	if (board[startX][startY] == EMPTY) return false; // Not a piece
+	if (board[startX][startY] == EMPTY || board[startX][startY] == CORNER) return false; // Not a piece
 	if (startX != endX && startY != endY) return false; // Only straight moves allowed
 	if (moveCounter % 2 == 1 && board[startX][startY] != ATTACKER_PIECE) return false; // Can't move defender and king on attacker turn
 	if (moveCounter % 2 == 0 && board[startX][startY] == ATTACKER_PIECE) return false; // Can't move attacker on defender turn
