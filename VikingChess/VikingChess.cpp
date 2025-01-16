@@ -123,6 +123,187 @@ void printBoard()
 	cout << endl;
 }
 
+bool isCorner(int row, int col)
+{
+	return board[row][col] == CORNER;
+}
+
+bool isEdge(int row, int col)
+{
+	return row == 0 || col == 0 || row == BOARD_SIZE - 1 || col == BOARD_SIZE - 1;
+}
+
+bool isThrone(int row, int col)
+{
+	return row == BOARD_SIZE / 2 && col == BOARD_SIZE / 2;
+}
+
+bool isKingCaptured(int targetRow, int targetCol)
+{
+	int sidesSurrounded = 0;
+	int sidesToCapture;
+	if (isEdge(targetRow, targetCol))
+	{
+		sidesToCapture = 3;
+	}
+	else
+	{
+		sidesToCapture = 4;
+	}
+	if (board[targetRow - 1][targetCol] == ATTACKER_PIECE ||
+		isCorner(targetRow - 1, targetCol) ||
+		isThrone(targetRow - 1, targetCol))
+	{
+		sidesSurrounded++;
+	}
+	if (board[targetRow][targetCol - 1] == ATTACKER_PIECE ||
+		isCorner(targetRow, targetCol - 1) ||
+		isThrone(targetRow, targetCol - 1))
+	{
+		sidesSurrounded++;
+	}
+	if (board[targetRow + 1][targetCol] == ATTACKER_PIECE ||
+		isCorner(targetRow + 1, targetCol) ||
+		isThrone(targetRow + 1, targetCol))
+	{
+		sidesSurrounded++;
+		if (sidesSurrounded == sidesToCapture)
+		{
+			return true;
+		}
+	}
+	if (board[targetRow][targetCol + 1] == ATTACKER_PIECE ||
+		isCorner(targetRow, targetCol + 1) ||
+		isThrone(targetRow, targetCol + 1))
+	{
+		sidesSurrounded++;
+	}
+	if (sidesSurrounded == sidesToCapture)
+	{
+		return true;
+	}
+	return false;
+}
+
+void checkCaptureForAttackers(int targetRow, int targetCol)
+{
+	// top
+	if (targetRow > 1 && board[targetRow - 1][targetCol] == DEFENDER_PIECE &&
+		(board[targetRow - 2][targetCol] == ATTACKER_PIECE ||
+			isCorner(targetRow - 2, targetCol) ||
+			isThrone(targetRow - 2, targetCol)))
+	{
+		board[targetRow - 1][targetCol] = EMPTY;
+		cout << "Captured piece at (" << targetRow - 1 << ", " << targetCol << ")\n";
+	}
+
+	// left
+	if (targetCol > 1 && board[targetRow][targetCol - 1] == DEFENDER_PIECE &&
+		(board[targetRow][targetCol - 2] == ATTACKER_PIECE ||
+			isCorner(targetRow, targetCol - 2) ||
+			isThrone(targetRow, targetCol - 2)))
+	{
+		board[targetRow][targetCol - 1] = EMPTY;
+		cout << "Captured piece at (" << targetRow << ", " << targetCol - 1 << ")\n";
+	}
+
+	// down
+	if (targetRow < BOARD_SIZE - 2 && board[targetRow + 1][targetCol] == DEFENDER_PIECE &&
+		(board[targetRow + 2][targetCol] == ATTACKER_PIECE ||
+			isCorner(targetRow + 2, targetCol) ||
+			isThrone(targetRow + 2, targetCol)))
+	{
+		board[targetRow + 1][targetCol] = EMPTY;
+		cout << "Captured piece at (" << targetRow + 1 << ", " << targetCol << ")\n";
+	}
+
+	// right
+	if (targetCol < BOARD_SIZE - 2 && board[targetRow][targetCol + 1] == DEFENDER_PIECE &&
+		(board[targetRow][targetCol + 2] == ATTACKER_PIECE ||
+			isCorner(targetRow, targetCol + 2) ||
+			isThrone(targetRow, targetCol + 2)))
+	{
+		board[targetRow][targetCol + 1] = EMPTY;
+		cout << "Captured piece at (" << targetRow << ", " << targetCol + 1 << ")\n";
+	}
+
+	if (board[targetRow - 1][targetCol] == KING && isKingCaptured(targetRow - 1, targetCol))
+	{
+		cout << "Captured King";
+	}
+	else if (board[targetRow][targetCol - 1] == KING && isKingCaptured(targetRow, targetCol - 1))
+	{
+		cout << "Captured King";
+	}
+	else if (board[targetRow + 1][targetCol] == KING && isKingCaptured(targetRow + 1, targetCol))
+	{
+		cout << "Captured King";
+	}
+	else if (board[targetRow][targetCol + 1] == KING && isKingCaptured(targetRow, targetCol + 1))
+	{
+		cout << "Captured King";
+	}
+}
+
+void checkCaptureForDefenders(int targetRow, int targetCol)
+{
+	// top
+	if (targetRow > 1 && board[targetRow - 1][targetCol] == ATTACKER_PIECE &&
+		(board[targetRow - 2][targetCol] == DEFENDER_PIECE ||
+			board[targetRow - 2][targetCol] == KING ||
+			isCorner(targetRow - 2, targetCol) ||
+			isThrone(targetRow - 2, targetCol)))
+	{
+		board[targetRow - 1][targetCol] = EMPTY;
+		cout << "Captured piece at (" << targetRow - 1 << ", " << targetCol << ")\n";
+	}
+
+	// left
+	if (targetCol > 1 && board[targetRow][targetCol - 1] == ATTACKER_PIECE &&
+		(board[targetRow][targetCol - 2] == DEFENDER_PIECE ||
+			board[targetRow][targetCol - 2] == KING ||
+			isCorner(targetRow, targetCol - 2) ||
+			isThrone(targetRow, targetCol - 2)))
+	{
+		board[targetRow][targetCol - 1] = EMPTY;
+		cout << "Captured piece at (" << targetRow << ", " << targetCol - 1 << ")\n";
+	}
+
+	// down
+	if (targetRow < BOARD_SIZE - 2 && board[targetRow + 1][targetCol] == ATTACKER_PIECE &&
+		(board[targetRow + 2][targetCol] == DEFENDER_PIECE ||
+			board[targetRow + 2][targetCol] == KING ||
+			isCorner(targetRow + 2, targetCol) ||
+			isThrone(targetRow + 2, targetCol)))
+	{
+		board[targetRow + 1][targetCol] = EMPTY;
+		cout << "Captured piece at (" << targetRow + 1 << ", " << targetCol << ")\n";
+	}
+
+	// right
+	if (targetCol < BOARD_SIZE - 2 && board[targetRow][targetCol + 1] == ATTACKER_PIECE &&
+		(board[targetRow][targetCol + 2] == DEFENDER_PIECE ||
+			board[targetRow][targetCol + 2] == KING ||
+			isCorner(targetRow, targetCol + 2) ||
+			isThrone(targetRow, targetCol + 2)))
+	{
+		board[targetRow][targetCol + 1] = EMPTY;
+		cout << "Captured piece at (" << targetRow << ", " << targetCol + 1 << ")\n";
+	}
+}
+
+void checkCapture(int targetRow, int targetCol, char pieceMoved)
+{
+	if (pieceMoved == ATTACKER_PIECE)
+	{
+		checkCaptureForAttackers(targetRow, targetCol);
+	}
+	else
+	{
+		checkCaptureForDefenders(targetRow, targetCol);
+	}
+}
+
 bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter)
 {
 	if (endX < 0 || endX >= BOARD_SIZE || endY < 0 || endY >= BOARD_SIZE) return false; // Out of bounds
@@ -155,6 +336,7 @@ void makeMove(int startX, int startY, int endX, int endY, int& moveCounter)
 		board[startX][startY] = EMPTY;
 		board[endX][endY] = piece;
 		cout << "Moved piece from (" << startX + 1 << ", " << startY + 1 << ") to (" << endX + 1 << ", " << endY + 1 << ")." << endl;
+		checkCapture(endX, endY, piece);
 		moveCounter++;
 	}
 	else
