@@ -229,19 +229,23 @@ void checkCaptureForAttackers(int targetRow, int targetCol)
 
 	if (board[targetRow - 1][targetCol] == KING && isKingCaptured(targetRow - 1, targetCol))
 	{
-		cout << "Captured King\n";
+		cout << "The King was aptured!" << endl << "Attackers Win!!!";
+		exit(0);
 	}
 	else if (board[targetRow][targetCol - 1] == KING && isKingCaptured(targetRow, targetCol - 1))
 	{
-		cout << "Captured King\n";
+		cout << "The King was aptured!" << endl << "Attackers Win!!!";
+		exit(0);
 	}
 	else if (board[targetRow + 1][targetCol] == KING && isKingCaptured(targetRow + 1, targetCol))
 	{
-		cout << "Captured King\n";
+		cout << "The King was aptured!" << endl << "Attackers Win!!!";
+		exit(0);
 	}
 	else if (board[targetRow][targetCol + 1] == KING && isKingCaptured(targetRow, targetCol + 1))
 	{
-		cout << "Captured King\n";
+		cout << "The King was aptured!" << endl << "Attackers Win!!!";
+		exit(0);
 	}
 }
 
