@@ -5,8 +5,9 @@
 using namespace std;
 
 const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A', CORNER = 'X';
-int BOARD_SIZE = 11;
+const int BOARD_SIZE = 11;
 char board[11][11];
+char history[1024][11][11];
 
 void initializeBoard()
 {
@@ -125,10 +126,10 @@ void printBoard()
 
 bool isCorner(int row, int col)
 {
-	return (row == 0 && col == 0) || 
-		(row == 0 && col == BOARD_SIZE - 1) || 
+	return (row == 0 && col == 0) ||
+		(row == 0 && col == BOARD_SIZE - 1) ||
 		(row == BOARD_SIZE - 1 && col == 0) ||
-		(row == BOARD_SIZE - 1 && col == BOARD_SIZE - 1); 
+		(row == BOARD_SIZE - 1 && col == BOARD_SIZE - 1);
 }
 
 bool isEdge(int row, int col)
@@ -359,12 +360,48 @@ void makeMove(int startX, int startY, int endX, int endY, int& moveCounter)
 	}
 }
 
+void changeBoardToPreviousFromHistory(char board[BOARD_SIZE][BOARD_SIZE], char history[1024][BOARD_SIZE][BOARD_SIZE], int moveCounter)
+{
+	for (int i = 0; i < BOARD_SIZE; ++i)
+	{
+		for (int j = 0; j < BOARD_SIZE; ++j)
+		{
+			board[i][j] = history[moveCounter][i][j];
+		}
+	}
+}
+
+void undoMove(char board[BOARD_SIZE][BOARD_SIZE], char history[1024][BOARD_SIZE][BOARD_SIZE], int& moveCounter)
+{
+	if (moveCounter < 1)
+	{
+		cout << "No move to undo!\n";
+	}
+	else
+	{
+		moveCounter--;
+		changeBoardToPreviousFromHistory(board, history, moveCounter);
+	}
+}
+
+void addCurrentBoardToHistory(char board[BOARD_SIZE][BOARD_SIZE], char history[1024][BOARD_SIZE][BOARD_SIZE], int moveCounter)
+{
+	for (int i = 0; i < BOARD_SIZE; ++i)
+	{
+		for (int j = 0; j < BOARD_SIZE; ++j)
+		{
+			history[moveCounter][i][j] = board[i][j];
+		}
+	}
+}
+
 int main()
 {
 	initializeBoard();
 	printBoard();
 
 	int moveCounter = 0;
+	addCurrentBoardToHistory(board, history, moveCounter);
 
 	char command[10];
 	while (true)
@@ -377,6 +414,12 @@ int main()
 			int startX, startY, endX, endY;
 			cin >> startX >> startY >> endX >> endY;
 			makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter);
+			addCurrentBoardToHistory(board, history, moveCounter);
+			printBoard();
+		}
+		else if (command[0] == 'u' && command[1] == 'n' && command[2] == 'd' && command[3] == 'o')
+		{
+			undoMove(board, history, moveCounter);
 			printBoard();
 		}
 	}
