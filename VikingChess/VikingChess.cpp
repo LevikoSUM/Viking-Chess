@@ -311,11 +311,13 @@ void checkCapture(int targetRow, int targetCol, char pieceMoved)
 bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter)
 {
 	if (endX < 0 || endX >= BOARD_SIZE || endY < 0 || endY >= BOARD_SIZE) return false; // Out of bounds
-	if (board[endX][endY] != EMPTY) return false; // Destination not empty
+	if (board[endX][endY] != EMPTY && (board[startX][startY] == ATTACKER_PIECE || board[startX][startY] == DEFENDER_PIECE)) return false; // Destination not empty
+	if (board[startX][startY] == KING && (board[endX][endY] == ATTACKER_PIECE || board[endX][endY] == DEFENDER_PIECE)) return false; // Destination not empty, but for the king (because only he can be on corners)
 	if (board[startX][startY] == EMPTY || board[startX][startY] == CORNER) return false; // Not a piece
 	if (startX != endX && startY != endY) return false; // Only straight moves allowed
 	if (moveCounter % 2 == 0 && board[startX][startY] != ATTACKER_PIECE) return false; // Can't move defender and king on attacker turn
 	if (moveCounter % 2 == 1 && board[startX][startY] == ATTACKER_PIECE) return false; // Can't move attacker on defender turn
+	if (isThrone(endX, endY) && (board[startX][startY] == ATTACKER_PIECE || board[startX][startY] == DEFENDER_PIECE)) return false; // Can't enter throne
 
 	int directionX = (endX > startX) - (endX < startX);
 	int directionY = (endY > startY) - (endY < startY);
