@@ -125,7 +125,10 @@ void printBoard()
 
 bool isCorner(int row, int col)
 {
-	return board[row][col] == CORNER;
+	return (row == 0 && col == 0) || 
+		(row == 0 && col == BOARD_SIZE - 1) || 
+		(row == BOARD_SIZE - 1 && col == 0) ||
+		(row == BOARD_SIZE - 1 && col == BOARD_SIZE - 1); 
 }
 
 bool isEdge(int row, int col)
@@ -344,6 +347,11 @@ void makeMove(int startX, int startY, int endX, int endY, int& moveCounter)
 		cout << "Moved piece from (" << startX + 1 << ", " << startY + 1 << ") to (" << endX + 1 << ", " << endY + 1 << ")." << endl;
 		checkCapture(endX, endY, piece);
 		moveCounter++;
+		if (piece == KING && isCorner(endX, endY))
+		{
+			cout << "The king has reached a corner!" << endl << "Defenders Win!!!\n";
+			exit(0);
+		}
 	}
 	else
 	{
