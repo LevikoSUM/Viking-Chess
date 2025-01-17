@@ -84,7 +84,7 @@ void printBoard()
 
 			for (int j = 0; j < BOARD_SIZE; j++)
 			{
-				if (rowPart == 1 && board[i][j] != ' ')
+				if (rowPart == 1 && board[i][j] != EMPTY)
 				{
 
 					cout << "|   " << board[i][j] << "   ";
@@ -229,19 +229,19 @@ void checkCaptureForAttackers(int targetRow, int targetCol)
 
 	if (board[targetRow - 1][targetCol] == KING && isKingCaptured(targetRow - 1, targetCol))
 	{
-		cout << "Captured King";
+		cout << "Captured King\n";
 	}
 	else if (board[targetRow][targetCol - 1] == KING && isKingCaptured(targetRow, targetCol - 1))
 	{
-		cout << "Captured King";
+		cout << "Captured King\n";
 	}
 	else if (board[targetRow + 1][targetCol] == KING && isKingCaptured(targetRow + 1, targetCol))
 	{
-		cout << "Captured King";
+		cout << "Captured King\n";
 	}
 	else if (board[targetRow][targetCol + 1] == KING && isKingCaptured(targetRow, targetCol + 1))
 	{
-		cout << "Captured King";
+		cout << "Captured King\n";
 	}
 }
 
@@ -310,8 +310,8 @@ bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter)
 	if (board[endX][endY] != EMPTY) return false; // Destination not empty
 	if (board[startX][startY] == EMPTY || board[startX][startY] == CORNER) return false; // Not a piece
 	if (startX != endX && startY != endY) return false; // Only straight moves allowed
-	if (moveCounter % 2 == 1 && board[startX][startY] != ATTACKER_PIECE) return false; // Can't move defender and king on attacker turn
-	if (moveCounter % 2 == 0 && board[startX][startY] == ATTACKER_PIECE) return false; // Can't move attacker on defender turn
+	if (moveCounter % 2 == 0 && board[startX][startY] != ATTACKER_PIECE) return false; // Can't move defender and king on attacker turn
+	if (moveCounter % 2 == 1 && board[startX][startY] == ATTACKER_PIECE) return false; // Can't move attacker on defender turn
 
 	int directionX = (endX > startX) - (endX < startX);
 	int directionY = (endY > startY) - (endY < startY);
@@ -350,7 +350,7 @@ int main()
 	initializeBoard();
 	printBoard();
 
-	int moveCounter = 1;
+	int moveCounter = 0;
 
 	char command[10];
 	while (true)
