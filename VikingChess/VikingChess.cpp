@@ -5,21 +5,24 @@
 using namespace std;
 
 const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A', CORNER = 'X';
-const int BOARD_SIZE = 11;
-char board[11][11];
-char history[1024][11][11];
+//const int BOARD_SIZE_SMALL = 7;
+//const int BOARD_SIZE_MEDIUM = 9;
+//const int BOARD_SIZE = 11;
+//const int BOARD_SIZE_LARGE = 13;
+//char board[11][11];
+//char history[1024][11][11];
 
-void initializeBoard()
+void initializeBoard(int size, char** board)
 {
-	for (int i = 0; i < BOARD_SIZE; i++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < BOARD_SIZE; j++)
+		for (int j = 0; j < size; j++)
 		{
 			board[i][j] = EMPTY;
 		}
 	}
 
-	board[BOARD_SIZE / 2][BOARD_SIZE / 2] = KING;
+	board[size / 2][size / 2] = KING;
 
 	for (int i = 3; i < 8; i++)
 	{
@@ -53,12 +56,12 @@ void initializeBoard()
 
 }
 
-void printBoard()
+void printBoard(int size, char** board)
 {
-	for (int i = 0; i < BOARD_SIZE; i++)
+	for (int i = 0; i < size; i++)
 	{
 		cout << "    ";
-		for (int j = 0; j < BOARD_SIZE; j++)
+		for (int j = 0; j < size; j++)
 		{
 			cout << "+-------";
 		}
@@ -83,7 +86,7 @@ void printBoard()
 				cout << "    ";
 			}
 
-			for (int j = 0; j < BOARD_SIZE; j++)
+			for (int j = 0; j < size; j++)
 			{
 				if (rowPart == 1 && board[i][j] != EMPTY)
 				{
@@ -102,7 +105,7 @@ void printBoard()
 
 
 	cout << "    ";
-	for (int j = 0; j < BOARD_SIZE; j++)
+	for (int j = 0; j < size; j++)
 	{
 		cout << "+-------";
 	}
@@ -110,7 +113,7 @@ void printBoard()
 
 
 	cout << "    ";
-	for (int j = 0; j < BOARD_SIZE; j++)
+	for (int j = 0; j < size; j++)
 	{
 		if (j + 1 < 10)
 		{
@@ -124,29 +127,29 @@ void printBoard()
 	cout << endl;
 }
 
-bool isCorner(int row, int col)
+bool isCorner(int row, int col, int size)
 {
 	return (row == 0 && col == 0) ||
-		(row == 0 && col == BOARD_SIZE - 1) ||
-		(row == BOARD_SIZE - 1 && col == 0) ||
-		(row == BOARD_SIZE - 1 && col == BOARD_SIZE - 1);
+		(row == 0 && col == size - 1) ||
+		(row == size - 1 && col == 0) ||
+		(row == size - 1 && col == size - 1);
 }
 
-bool isEdge(int row, int col)
+bool isEdge(int row, int col, int size)
 {
-	return row == 0 || col == 0 || row == BOARD_SIZE - 1 || col == BOARD_SIZE - 1;
+	return row == 0 || col == 0 || row == size - 1 || col == size - 1;
 }
 
-bool isThrone(int row, int col)
+bool isThrone(int row, int col, int size)
 {
-	return row == BOARD_SIZE / 2 && col == BOARD_SIZE / 2;
+	return row == size / 2 && col == size / 2;
 }
 
-bool isKingCaptured(int targetRow, int targetCol)
+bool isKingCaptured(int targetRow, int targetCol, int size, char** board)
 {
 	int sidesSurrounded = 0;
 	int sidesToCapture;
-	if (isEdge(targetRow, targetCol))
+	if (isEdge(targetRow, targetCol, size))
 	{
 		sidesToCapture = 3;
 	}
@@ -155,20 +158,20 @@ bool isKingCaptured(int targetRow, int targetCol)
 		sidesToCapture = 4;
 	}
 	if (board[targetRow - 1][targetCol] == ATTACKER_PIECE ||
-		isCorner(targetRow - 1, targetCol) ||
-		isThrone(targetRow - 1, targetCol))
+		isCorner(targetRow - 1, targetCol, size) ||
+		isThrone(targetRow - 1, targetCol, size))
 	{
 		sidesSurrounded++;
 	}
 	if (board[targetRow][targetCol - 1] == ATTACKER_PIECE ||
-		isCorner(targetRow, targetCol - 1) ||
-		isThrone(targetRow, targetCol - 1))
+		isCorner(targetRow, targetCol - 1, size) ||
+		isThrone(targetRow, targetCol - 1, size))
 	{
 		sidesSurrounded++;
 	}
 	if (board[targetRow + 1][targetCol] == ATTACKER_PIECE ||
-		isCorner(targetRow + 1, targetCol) ||
-		isThrone(targetRow + 1, targetCol))
+		isCorner(targetRow + 1, targetCol, size) ||
+		isThrone(targetRow + 1, targetCol, size))
 	{
 		sidesSurrounded++;
 		if (sidesSurrounded == sidesToCapture)
@@ -177,8 +180,8 @@ bool isKingCaptured(int targetRow, int targetCol)
 		}
 	}
 	if (board[targetRow][targetCol + 1] == ATTACKER_PIECE ||
-		isCorner(targetRow, targetCol + 1) ||
-		isThrone(targetRow, targetCol + 1))
+		isCorner(targetRow, targetCol + 1, size) ||
+		isThrone(targetRow, targetCol + 1, size))
 	{
 		sidesSurrounded++;
 	}
@@ -189,13 +192,13 @@ bool isKingCaptured(int targetRow, int targetCol)
 	return false;
 }
 
-void checkCaptureForAttackers(int targetRow, int targetCol)
+void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** board)
 {
 	// top
 	if (targetRow > 1 && board[targetRow - 1][targetCol] == DEFENDER_PIECE &&
 		(board[targetRow - 2][targetCol] == ATTACKER_PIECE ||
-			isCorner(targetRow - 2, targetCol) ||
-			isThrone(targetRow - 2, targetCol)))
+			isCorner(targetRow - 2, targetCol, size) ||
+			isThrone(targetRow - 2, targetCol, size)))
 	{
 		board[targetRow - 1][targetCol] = EMPTY;
 		cout << "Captured piece at (" << targetRow - 1 << ", " << targetCol << ")\n";
@@ -204,63 +207,63 @@ void checkCaptureForAttackers(int targetRow, int targetCol)
 	// left
 	if (targetCol > 1 && board[targetRow][targetCol - 1] == DEFENDER_PIECE &&
 		(board[targetRow][targetCol - 2] == ATTACKER_PIECE ||
-			isCorner(targetRow, targetCol - 2) ||
-			isThrone(targetRow, targetCol - 2)))
+			isCorner(targetRow, targetCol - 2, size) ||
+			isThrone(targetRow, targetCol - 2, size)))
 	{
 		board[targetRow][targetCol - 1] = EMPTY;
 		cout << "Captured piece at (" << targetRow << ", " << targetCol - 1 << ")\n";
 	}
 
 	// down
-	if (targetRow < BOARD_SIZE - 2 && board[targetRow + 1][targetCol] == DEFENDER_PIECE &&
+	if (targetRow < size - 2 && board[targetRow + 1][targetCol] == DEFENDER_PIECE &&
 		(board[targetRow + 2][targetCol] == ATTACKER_PIECE ||
-			isCorner(targetRow + 2, targetCol) ||
-			isThrone(targetRow + 2, targetCol)))
+			isCorner(targetRow + 2, targetCol, size) ||
+			isThrone(targetRow + 2, targetCol, size)))
 	{
 		board[targetRow + 1][targetCol] = EMPTY;
 		cout << "Captured piece at (" << targetRow + 1 << ", " << targetCol << ")\n";
 	}
 
 	// right
-	if (targetCol < BOARD_SIZE - 2 && board[targetRow][targetCol + 1] == DEFENDER_PIECE &&
+	if (targetCol < size - 2 && board[targetRow][targetCol + 1] == DEFENDER_PIECE &&
 		(board[targetRow][targetCol + 2] == ATTACKER_PIECE ||
-			isCorner(targetRow, targetCol + 2) ||
-			isThrone(targetRow, targetCol + 2)))
+			isCorner(targetRow, targetCol + 2, size) ||
+			isThrone(targetRow, targetCol + 2, size)))
 	{
 		board[targetRow][targetCol + 1] = EMPTY;
 		cout << "Captured piece at (" << targetRow << ", " << targetCol + 1 << ")\n";
 	}
 
-	if (board[targetRow - 1][targetCol] == KING && isKingCaptured(targetRow - 1, targetCol))
+	if (targetRow > 0 &&board[targetRow - 1][targetCol] == KING && isKingCaptured(targetRow - 1, targetCol, size, board))
 	{
 		cout << "The King was aptured!" << endl << "Attackers Win!!!";
 		exit(0);
 	}
-	else if (board[targetRow][targetCol - 1] == KING && isKingCaptured(targetRow, targetCol - 1))
+	else if (targetCol > 0 && board[targetRow][targetCol - 1] == KING && isKingCaptured(targetRow, targetCol - 1, size, board))
 	{
 		cout << "The King was aptured!" << endl << "Attackers Win!!!";
 		exit(0);
 	}
-	else if (board[targetRow + 1][targetCol] == KING && isKingCaptured(targetRow + 1, targetCol))
+	else if (targetRow < size - 1 && board[targetRow + 1][targetCol] == KING && isKingCaptured(targetRow + 1, targetCol, size, board))
 	{
 		cout << "The King was aptured!" << endl << "Attackers Win!!!";
 		exit(0);
 	}
-	else if (board[targetRow][targetCol + 1] == KING && isKingCaptured(targetRow, targetCol + 1))
+	else if (targetCol < size - 1 && board[targetRow][targetCol + 1] == KING && isKingCaptured(targetRow, targetCol + 1, size, board))
 	{
 		cout << "The King was aptured!" << endl << "Attackers Win!!!";
 		exit(0);
 	}
 }
 
-void checkCaptureForDefenders(int targetRow, int targetCol)
+void checkCaptureForDefenders(int targetRow, int targetCol, int size, char** board)
 {
 	// top
 	if (targetRow > 1 && board[targetRow - 1][targetCol] == ATTACKER_PIECE &&
 		(board[targetRow - 2][targetCol] == DEFENDER_PIECE ||
 			board[targetRow - 2][targetCol] == KING ||
-			isCorner(targetRow - 2, targetCol) ||
-			isThrone(targetRow - 2, targetCol)))
+			isCorner(targetRow - 2, targetCol, size) ||
+			isThrone(targetRow - 2, targetCol, size)))
 	{
 		board[targetRow - 1][targetCol] = EMPTY;
 		cout << "Captured piece at (" << targetRow - 1 << ", " << targetCol << ")\n";
@@ -270,58 +273,58 @@ void checkCaptureForDefenders(int targetRow, int targetCol)
 	if (targetCol > 1 && board[targetRow][targetCol - 1] == ATTACKER_PIECE &&
 		(board[targetRow][targetCol - 2] == DEFENDER_PIECE ||
 			board[targetRow][targetCol - 2] == KING ||
-			isCorner(targetRow, targetCol - 2) ||
-			isThrone(targetRow, targetCol - 2)))
+			isCorner(targetRow, targetCol - 2, size) ||
+			isThrone(targetRow, targetCol - 2, size)))
 	{
 		board[targetRow][targetCol - 1] = EMPTY;
 		cout << "Captured piece at (" << targetRow << ", " << targetCol - 1 << ")\n";
 	}
 
 	// down
-	if (targetRow < BOARD_SIZE - 2 && board[targetRow + 1][targetCol] == ATTACKER_PIECE &&
+	if (targetRow < size - 2 && board[targetRow + 1][targetCol] == ATTACKER_PIECE &&
 		(board[targetRow + 2][targetCol] == DEFENDER_PIECE ||
 			board[targetRow + 2][targetCol] == KING ||
-			isCorner(targetRow + 2, targetCol) ||
-			isThrone(targetRow + 2, targetCol)))
+			isCorner(targetRow + 2, targetCol, size) ||
+			isThrone(targetRow + 2, targetCol, size)))
 	{
 		board[targetRow + 1][targetCol] = EMPTY;
 		cout << "Captured piece at (" << targetRow + 1 << ", " << targetCol << ")\n";
 	}
 
 	// right
-	if (targetCol < BOARD_SIZE - 2 && board[targetRow][targetCol + 1] == ATTACKER_PIECE &&
+	if (targetCol < size - 2 && board[targetRow][targetCol + 1] == ATTACKER_PIECE &&
 		(board[targetRow][targetCol + 2] == DEFENDER_PIECE ||
 			board[targetRow][targetCol + 2] == KING ||
-			isCorner(targetRow, targetCol + 2) ||
-			isThrone(targetRow, targetCol + 2)))
+			isCorner(targetRow, targetCol + 2, size) ||
+			isThrone(targetRow, targetCol + 2, size)))
 	{
 		board[targetRow][targetCol + 1] = EMPTY;
 		cout << "Captured piece at (" << targetRow << ", " << targetCol + 1 << ")\n";
 	}
 }
 
-void checkCapture(int targetRow, int targetCol, char pieceMoved)
+void checkCapture(int targetRow, int targetCol, char pieceMoved, int size, char** board)
 {
 	if (pieceMoved == ATTACKER_PIECE)
 	{
-		checkCaptureForAttackers(targetRow, targetCol);
+		checkCaptureForAttackers(targetRow, targetCol, size, board);
 	}
 	else
 	{
-		checkCaptureForDefenders(targetRow, targetCol);
+		checkCaptureForDefenders(targetRow, targetCol, size, board);
 	}
 }
 
-bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter)
+bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter, int size, char** board)
 {
-	if (endX < 0 || endX >= BOARD_SIZE || endY < 0 || endY >= BOARD_SIZE) return false; // Out of bounds
+	if (endX < 0 || endX >= size || endY < 0 || endY >= size) return false; // Out of bounds
 	if (board[endX][endY] != EMPTY && (board[startX][startY] == ATTACKER_PIECE || board[startX][startY] == DEFENDER_PIECE)) return false; // Destination not empty
 	if (board[startX][startY] == KING && (board[endX][endY] == ATTACKER_PIECE || board[endX][endY] == DEFENDER_PIECE)) return false; // Destination not empty, but for the king (because only he can be on corners)
 	if (board[startX][startY] == EMPTY || board[startX][startY] == CORNER) return false; // Not a piece
 	if (startX != endX && startY != endY) return false; // Only straight moves allowed
 	if (moveCounter % 2 == 0 && board[startX][startY] != ATTACKER_PIECE) return false; // Can't move defender and king on attacker turn
 	if (moveCounter % 2 == 1 && board[startX][startY] == ATTACKER_PIECE) return false; // Can't move attacker on defender turn
-	if (isThrone(endX, endY) && (board[startX][startY] == ATTACKER_PIECE || board[startX][startY] == DEFENDER_PIECE)) return false; // Can't enter throne
+	if (isThrone(endX, endY, size) && (board[startX][startY] == ATTACKER_PIECE || board[startX][startY] == DEFENDER_PIECE)) return false; // Can't enter throne
 
 	int directionX = (endX > startX) - (endX < startX);
 	int directionY = (endY > startY) - (endY < startY);
@@ -338,17 +341,17 @@ bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter)
 	return true;
 }
 
-void makeMove(int startX, int startY, int endX, int endY, int& moveCounter)
+void makeMove(int startX, int startY, int endX, int endY, int& moveCounter, int size, char** board)
 {
-	if (isValidMove(startX, startY, endX, endY, moveCounter))
+	if (isValidMove(startX, startY, endX, endY, moveCounter, size, board))
 	{
 		char piece = board[startX][startY];
 		board[startX][startY] = EMPTY;
 		board[endX][endY] = piece;
 		cout << "Moved piece from (" << startX + 1 << ", " << startY + 1 << ") to (" << endX + 1 << ", " << endY + 1 << ")." << endl;
-		checkCapture(endX, endY, piece);
+		checkCapture(endX, endY, piece, size, board);
 		moveCounter++;
-		if (piece == KING && isCorner(endX, endY))
+		if (piece == KING && isCorner(endX, endY, size))
 		{
 			cout << "The king has reached a corner!" << endl << "Defenders Win!!!\n";
 			exit(0);
@@ -360,18 +363,18 @@ void makeMove(int startX, int startY, int endX, int endY, int& moveCounter)
 	}
 }
 
-void changeBoardToPreviousFromHistory(char board[BOARD_SIZE][BOARD_SIZE], char history[1024][BOARD_SIZE][BOARD_SIZE], int moveCounter)
+void changeBoardToPreviousFromHistory(char** board, char*** history, int moveCounter, int size)
 {
-	for (int i = 0; i < BOARD_SIZE; ++i)
+	for (int i = 0; i < size; ++i)
 	{
-		for (int j = 0; j < BOARD_SIZE; ++j)
+		for (int j = 0; j < size; ++j)
 		{
 			board[i][j] = history[moveCounter][i][j];
 		}
 	}
 }
 
-void undoMove(char board[BOARD_SIZE][BOARD_SIZE], char history[1024][BOARD_SIZE][BOARD_SIZE], int& moveCounter)
+void undoMove(char** board, char*** history, int& moveCounter, int size)
 {
 	if (moveCounter < 1)
 	{
@@ -380,28 +383,99 @@ void undoMove(char board[BOARD_SIZE][BOARD_SIZE], char history[1024][BOARD_SIZE]
 	else
 	{
 		moveCounter--;
-		changeBoardToPreviousFromHistory(board, history, moveCounter);
+		changeBoardToPreviousFromHistory(board, history, moveCounter, size);
 	}
 }
 
-void addCurrentBoardToHistory(char board[BOARD_SIZE][BOARD_SIZE], char history[1024][BOARD_SIZE][BOARD_SIZE], int moveCounter)
+void addCurrentBoardToHistory(char** board, char*** history, int moveCounter, int size)
 {
-	for (int i = 0; i < BOARD_SIZE; ++i)
+	for (int i = 0; i < size; ++i)
 	{
-		for (int j = 0; j < BOARD_SIZE; ++j)
+		for (int j = 0; j < size; ++j)
 		{
 			history[moveCounter][i][j] = board[i][j];
 		}
 	}
 }
 
+//int chooseBoard(int size)
+//{
+//	if (size == 7)
+//	{
+//		return 1;
+//	}
+//	else if (size == 9)
+//	{
+//		return 2;
+//	}
+//	else if (size == 11)
+//	{
+//		return 3;
+//	}
+//	else if (size == 13)
+//	{
+//		return 4;
+//	}
+//}
+
+//void printMenu()
+//{
+//	cout << "Welcome to Tafl!\n";
+//	cout << "Choose an option:\n";
+//	cout << "1. Start Game.\n";
+//	cout << "2. Quit\n"
+//}
+//
+//void selectMenuOption(int option)
+//{
+//	if (option == 1)
+//	{
+//
+//	}
+//	else if (option == 2)
+//	{
+//		exit(0);
+//	}
+//	else
+//	{
+//		cout << "Invalid input\n";
+//		cin >> option;
+//		selectMenuOption(option)
+//		
+//	}
+//}
+
+char** createBoard(int size) 
+{
+	char** board = new char*[size];
+	for (int i = 0; i < size; ++i) 
+	{
+		board[i] = new char[size];
+	}
+	return board;
+}
+
 int main()
 {
-	initializeBoard();
-	printBoard();
+	/*printMenu();*/
+	int size;
+	cin >> size;
+	char** board = createBoard(size);//delete later
+	char*** history = new char**[1024];//delete later
+	for (int i = 0; i < 1024; ++i) 
+	{
+		history[i] = new char*[size];//delete later
+		for (int j = 0; j < size; ++j) 
+		{
+			history[i][j] = new char[size];//delete later
+		}
+	}
+	
+	initializeBoard(size, board);
+	printBoard(size, board);
 
 	int moveCounter = 0;
-	addCurrentBoardToHistory(board, history, moveCounter);
+	addCurrentBoardToHistory(board, history, moveCounter, size);
 
 	char command[10];
 	while (true)
@@ -413,14 +487,14 @@ int main()
 		{
 			int startX, startY, endX, endY;
 			cin >> startX >> startY >> endX >> endY;
-			makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter);
-			addCurrentBoardToHistory(board, history, moveCounter);
-			printBoard();
+			makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter, size, board);
+			addCurrentBoardToHistory(board, history, moveCounter, size);
+			printBoard(size, board);
 		}
 		else if (command[0] == 'u' && command[1] == 'n' && command[2] == 'd' && command[3] == 'o')
 		{
-			undoMove(board, history, moveCounter);
-			printBoard();
+			undoMove(board, history, moveCounter, size);
+			printBoard(size, board);
 		}
 	}
 }
