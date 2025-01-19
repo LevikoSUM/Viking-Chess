@@ -628,6 +628,13 @@ void printInfo(int moveCounter, char** board, int size, int defendersPiecesCount
 	cout << "The attackers have captured " << capturedDefendersPieces << " pieces" << endl;
 }
 
+void printHelp()
+{
+	cout << "move <number1> <number2> <number3> <number4> : move a piece  from (number1,number2) to (number3,number4) if possible.\n";
+	cout << "back : undo the last turn made.\n";
+	cout << "info : get information about the current board state.\n";
+}
+
 int main()
 {
 	printMenu();
@@ -668,6 +675,10 @@ int main()
 		else if (command[0] == 'i' && command[1] == 'n' && command[2] == 'f' && command[3] == 'o')
 		{
 			printInfo(moveCounter, board, size, defendersPiecesCountMax, attackersPiecesCountMax);
+		}
+		else if (command[0] == 'h' && command[1] == 'e' && command[2] == 'l' && command[3] == 'p')
+		{
+			printHelp();
 		}
 	}
 }
