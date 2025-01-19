@@ -22,37 +22,64 @@ void initializeBoard(int size, char** board)
 		}
 	}
 
-	board[size / 2][size / 2] = KING;
-
-	for (int i = 3; i < 8; i++)
-	{
-		if (i == 5) continue;
-		board[5][i] = DEFENDER_PIECE;
-		board[i][5] = DEFENDER_PIECE;
-	}
-
-	board[4][4] = DEFENDER_PIECE;
-	board[6][4] = DEFENDER_PIECE;
-	board[4][6] = DEFENDER_PIECE;
-	board[6][6] = DEFENDER_PIECE;
-
-	for (int i = 3; i <= 7; i++)
-	{
-
-		board[0][i] = ATTACKER_PIECE;
-		board[10][i] = ATTACKER_PIECE;
-		board[i][0] = ATTACKER_PIECE;
-		board[i][10] = ATTACKER_PIECE;
-	}
-
-	board[5][1] = ATTACKER_PIECE;
-	board[1][5] = ATTACKER_PIECE;
-	board[5][9] = ATTACKER_PIECE;
-	board[9][5] = ATTACKER_PIECE;
 	board[0][0] = CORNER;
-	board[0][10] = CORNER;
-	board[10][0] = CORNER;
-	board[10][10] = CORNER;
+	board[0][size - 1] = CORNER;
+	board[size - 1][0] = CORNER;
+	board[size - 1][size - 1] = CORNER;
+
+	board[size / 2][size / 2] = KING;
+	if (size == 7)
+	{
+		board[3][2] = DEFENDER_PIECE;
+		board[3][4] = DEFENDER_PIECE;
+		board[2][3] = DEFENDER_PIECE;
+		board[4][3] = DEFENDER_PIECE;
+
+		board[3][0] = ATTACKER_PIECE;
+		board[3][1] = ATTACKER_PIECE;
+		board[3][5] = ATTACKER_PIECE;
+		board[3][6] = ATTACKER_PIECE;
+		board[0][3] = ATTACKER_PIECE;
+		board[1][3] = ATTACKER_PIECE;
+		board[5][3] = ATTACKER_PIECE;
+		board[6][3] = ATTACKER_PIECE;
+	}
+	else if (size == 9)
+	{
+
+	}
+	else if (size == 11)
+	{
+		for (int i = 3; i < 8; i++)
+		{
+			if (i == 5) continue;
+			board[5][i] = DEFENDER_PIECE;
+			board[i][5] = DEFENDER_PIECE;
+		}
+
+		board[4][4] = DEFENDER_PIECE;
+		board[6][4] = DEFENDER_PIECE;
+		board[4][6] = DEFENDER_PIECE;
+		board[6][6] = DEFENDER_PIECE;
+
+		for (int i = 3; i <= 7; i++)
+		{
+
+			board[0][i] = ATTACKER_PIECE;
+			board[10][i] = ATTACKER_PIECE;
+			board[i][0] = ATTACKER_PIECE;
+			board[i][10] = ATTACKER_PIECE;
+		}
+
+		board[5][1] = ATTACKER_PIECE;
+		board[1][5] = ATTACKER_PIECE;
+		board[5][9] = ATTACKER_PIECE;
+		board[9][5] = ATTACKER_PIECE;
+	}
+	else if (size == 13)
+	{
+
+	}
 
 }
 
