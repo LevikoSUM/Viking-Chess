@@ -2,9 +2,10 @@
 //
 
 #include <iostream>
+#include "constants.h"
 using namespace std;
 
-const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A', CORNER = 'X';
+//const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A', CORNER = 'X';
 void clearInputBuffer()
 {
 	cin.clear();
