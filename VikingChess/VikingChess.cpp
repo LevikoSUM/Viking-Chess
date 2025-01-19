@@ -635,6 +635,18 @@ void printHelp()
 	cout << "info : get information about the current board state.\n";
 }
 
+bool compareCommand(const char command[], const char expected[]) 
+{
+	for (int i = 0; i < 4; i++) 
+	{
+		if (command[i] != expected[i]) 
+		{
+			return false; 
+		}
+	}
+	return command[4] == '\0';
+}
+
 int main()
 {
 	printMenu();
@@ -659,7 +671,7 @@ int main()
 		cout << "> ";
 		cin >> command;
 
-		if (command[0] == 'm' && command[1] == 'o' && command[2] == 'v' && command[3] == 'e')
+		if (compareCommand(command, "move"))
 		{
 			int startX, startY, endX, endY;
 			cin >> startX >> startY >> endX >> endY;
@@ -667,18 +679,22 @@ int main()
 			addCurrentBoardToHistory(board, history, moveCounter, size);
 			printBoard(size, board);
 		}
-		else if (command[0] == 'b' && command[1] == 'a' && command[2] == 'c' && command[3] == 'k')
+		else if (compareCommand(command, "back"))
 		{
 			undoMove(board, history, moveCounter, size);
 			printBoard(size, board);
 		}
-		else if (command[0] == 'i' && command[1] == 'n' && command[2] == 'f' && command[3] == 'o')
+		else if (compareCommand(command, "info"))
 		{
 			printInfo(moveCounter, board, size, defendersPiecesCountMax, attackersPiecesCountMax);
 		}
-		else if (command[0] == 'h' && command[1] == 'e' && command[2] == 'l' && command[3] == 'p')
+		else if (compareCommand(command, "help"))
 		{
 			printHelp();
+		}
+		else
+		{
+			cout << "Invalid command. You can write \"help\" to see available commands\n";
 		}
 	}
 }
