@@ -46,6 +46,26 @@ void initializeBoard(int size, char** board)
 	}
 	else if (size == 9)
 	{
+		board[4][3] = DEFENDER_PIECE;
+		board[4][5] = DEFENDER_PIECE;
+		board[3][4] = DEFENDER_PIECE;
+		board[5][4] = DEFENDER_PIECE;
+		board[4][2] = DEFENDER_PIECE;
+		board[4][6] = DEFENDER_PIECE;
+		board[2][4] = DEFENDER_PIECE;
+		board[6][4] = DEFENDER_PIECE;
+
+		for (int i = 3; i < 6; i++)
+		{
+			board[i][0] = ATTACKER_PIECE;
+			board[0][i] = ATTACKER_PIECE;
+			board[i][8] = ATTACKER_PIECE;
+			board[8][i] = ATTACKER_PIECE;
+		}
+		board[4][1] = ATTACKER_PIECE;
+		board[4][7] = ATTACKER_PIECE;
+		board[7][4] = ATTACKER_PIECE;
+		board[1][4] = ATTACKER_PIECE;
 
 	}
 	else if (size == 11)
