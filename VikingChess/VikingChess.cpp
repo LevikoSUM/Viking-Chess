@@ -5,12 +5,6 @@
 using namespace std;
 
 const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A', CORNER = 'X';
-//const int BOARD_SIZE_SMALL = 7;
-//const int BOARD_SIZE_MEDIUM = 9;
-//const int BOARD_SIZE = 11;
-//const int BOARD_SIZE_LARGE = 13;
-//char board[11][11];
-//char history[1024][11][11];
 void clearInputBuffer()
 {
 	cin.clear();
@@ -669,8 +663,8 @@ int main()
 	int size;
 	selectMenuOption(size);
 
-	char** board = createBoard(size);//delete later
-	char*** history = createHistory(size);//delete later
+	char** board = createBoard(size);
+	char*** history = createHistory(size);
 
 	initializeBoard(size, board);
 	printBoard(size, board);
