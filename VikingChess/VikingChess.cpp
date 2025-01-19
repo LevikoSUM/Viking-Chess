@@ -526,21 +526,27 @@ char** createBoard(int size)
 	return board;
 }
 
+char*** createHistory(int size)
+{
+	char*** history = new char**[1024];
+	for (int i = 0; i < 1024; ++i)
+	{
+		history[i] = new char* [size];
+		for (int j = 0; j < size; ++j)
+		{
+			history[i][j] = new char[size];
+		}
+	}
+	return history;
+}
+
 int main()
 {
 	/*printMenu();*/
 	int size;
 	cin >> size;
 	char** board = createBoard(size);//delete later
-	char*** history = new char**[1024];//delete later
-	for (int i = 0; i < 1024; ++i) 
-	{
-		history[i] = new char*[size];//delete later
-		for (int j = 0; j < size; ++j) 
-		{
-			history[i][j] = new char[size];//delete later
-		}
-	}
+	char*** history = createHistory(size);//delete later
 	
 	initializeBoard(size, board);
 	printBoard(size, board);
