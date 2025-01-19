@@ -436,9 +436,9 @@ void makeMove(int startX, int startY, int endX, int endY, int& moveCounter, int 
 
 void changeBoardToPreviousFromHistory(char** board, char*** history, int moveCounter, int size)
 {
-	for (int i = 0; i < size; ++i)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < size; ++j)
+		for (int j = 0; j < size; j++)
 		{
 			board[i][j] = history[moveCounter][i][j];
 		}
@@ -460,9 +460,9 @@ void undoMove(char** board, char*** history, int& moveCounter, int size)
 
 void addCurrentBoardToHistory(char** board, char*** history, int moveCounter, int size)
 {
-	for (int i = 0; i < size; ++i)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < size; ++j)
+		for (int j = 0; j < size; j++)
 		{
 			history[moveCounter][i][j] = board[i][j];
 		}
@@ -489,37 +489,78 @@ void addCurrentBoardToHistory(char** board, char*** history, int moveCounter, in
 //	}
 //}
 
-//void printMenu()
-//{
-//	cout << "Welcome to Tafl!\n";
-//	cout << "Choose an option:\n";
-//	cout << "1. Start Game.\n";
-//	cout << "2. Quit\n"
-//}
-//
-//void selectMenuOption(int option)
-//{
-//	if (option == 1)
-//	{
-//
-//	}
-//	else if (option == 2)
-//	{
-//		exit(0);
-//	}
-//	else
-//	{
-//		cout << "Invalid input\n";
-//		cin >> option;
-//		selectMenuOption(option)
-//		
-//	}
-//}
+void printBoardSelectionScreen()
+{
+	cout << "Choose the size of the board\n";
+	cout << "1. Small (7x7)\n";
+	cout << "2. Medium (9x9)\n";
+	cout << "3. Large (11x11)\n";
+	cout << "4. Huge (13x13)\n";
+}
+
+void selectBoard(int& size)
+{
+	char option;
+	cin >> option;
+	if (option == '1')
+	{
+		size = 7;
+		return;
+	}
+	if (option == '2')
+	{
+		size = 9;
+		return;
+	}
+	if (option == '3')
+	{
+		size = 11;
+		return;
+	}
+	if (option == '4')
+	{
+		size = 13;
+		return;
+	}
+	else
+	{
+		cout << "Invalid input\n";
+		selectBoard(size);
+	}
+}
+
+void printMenu()
+{
+	cout << "Welcome to Tafl!\n";
+	cout << "Choose an option:\n";
+	cout << "1. Start Game.\n";
+	cout << "2. Quit\n";
+}
+
+void selectMenuOption(int &size)
+{
+	char option;
+	cin >> option;
+	if (option == '1')
+	{
+		printBoardSelectionScreen();
+		selectBoard(size);
+	}
+	else if (option == '2')
+	{
+		exit(0);
+	}
+	else
+	{
+		cout << "Invalid input\n";
+		selectMenuOption(size);
+	}
+}
 
 char** createBoard(int size) 
 {
 	char** board = new char*[size];
-	for (int i = 0; i < size; ++i) 
+	for (int i = 0; i < size; i++) 
 	{
 		board[i] = new char[size];
 	}
@@ -529,10 +570,10 @@ char** createBoard(int size)
 char*** createHistory(int size)
 {
 	char*** history = new char**[1024];
-	for (int i = 0; i < 1024; ++i)
+	for (int i = 0; i < 1024; i++)
 	{
 		history[i] = new char* [size];
-		for (int j = 0; j < size; ++j)
+		for (int j = 0; j < size; j++)
 		{
 			history[i][j] = new char[size];
 		}
@@ -542,9 +583,10 @@ char*** createHistory(int size)
 
 int main()
 {
-	/*printMenu();*/
+	printMenu();
 	int size;
-	cin >> size;
+	selectMenuOption(size);
+
 	char** board = createBoard(size);//delete later
 	char*** history = createHistory(size);//delete later
 	
