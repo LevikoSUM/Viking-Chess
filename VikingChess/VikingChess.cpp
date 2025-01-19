@@ -610,7 +610,7 @@ int main()
 			addCurrentBoardToHistory(board, history, moveCounter, size);
 			printBoard(size, board);
 		}
-		else if (command[0] == 'u' && command[1] == 'n' && command[2] == 'd' && command[3] == 'o')
+		else if (command[0] == 'b' && command[1] == 'a' && command[2] == 'c' && command[3] == 'k')
 		{
 			undoMove(board, history, moveCounter, size);
 			printBoard(size, board);
