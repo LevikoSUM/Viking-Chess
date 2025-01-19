@@ -17,6 +17,34 @@ void clearInputBuffer()
 	while (cin.get() != '\n');
 }
 
+void deleteBoard(char** board, int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		delete[] board[i];
+	}
+	delete[] board;
+}
+
+void deleteHistory(char*** history, int size)
+{
+	for (int i = 0; i < 1024; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			delete[] history[i][j];
+		}
+		delete[] history[i];
+	}
+	delete[] history;
+}
+void quitGame(int size, char** board, char*** history)
+{
+	deleteBoard(board, size);
+	deleteHistory(history, size);
+	exit(0);
+}
+
 void initializeBoard(int size, char** board)
 {
 	for (int i = 0; i < size; i++)
@@ -263,7 +291,7 @@ bool isKingCaptured(int targetRow, int targetCol, int size, char** board)
 	return false;
 }
 
-void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** board)
+void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** board, char*** history)
 {
 	// top
 	if (targetRow > 1 && board[targetRow - 1][targetCol] == DEFENDER_PIECE &&
@@ -309,25 +337,25 @@ void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** boa
 	{
 		printBoard(size, board);
 		cout << "The King was captured!" << endl << "Attackers Win!!!";
-		exit(0);
+		quitGame(size, board, history);
 	}
 	else if (targetCol > 0 && board[targetRow][targetCol - 1] == KING && isKingCaptured(targetRow, targetCol - 1, size, board))
 	{
 		printBoard(size, board);
 		cout << "The King was captured!" << endl << "Attackers Win!!!";
-		exit(0);
+		quitGame(size, board, history);
 	}
 	else if (targetRow < size - 1 && board[targetRow + 1][targetCol] == KING && isKingCaptured(targetRow + 1, targetCol, size, board))
 	{
 		printBoard(size, board);
 		cout << "The King was captured!" << endl << "Attackers Win!!!";
-		exit(0);
+		quitGame(size, board, history);
 	}
 	else if (targetCol < size - 1 && board[targetRow][targetCol + 1] == KING && isKingCaptured(targetRow, targetCol + 1, size, board))
 	{
 		printBoard(size, board);
 		cout << "The King was captured!" << endl << "Attackers Win!!!";
-		exit(0);
+		quitGame(size, board, history);
 	}
 }
 
@@ -378,11 +406,11 @@ void checkCaptureForDefenders(int targetRow, int targetCol, int size, char** boa
 	}
 }
 
-void checkCapture(int targetRow, int targetCol, char pieceMoved, int size, char** board)
+void checkCapture(int targetRow, int targetCol, char pieceMoved, int size, char** board, char*** history)
 {
 	if (pieceMoved == ATTACKER_PIECE)
 	{
-		checkCaptureForAttackers(targetRow, targetCol, size, board);
+		checkCaptureForAttackers(targetRow, targetCol, size, board, history);
 	}
 	else
 	{
@@ -417,7 +445,7 @@ bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter, i
 	return true;
 }
 
-void makeMove(int startX, int startY, int endX, int endY, int& moveCounter, int size, char** board)
+void makeMove(int startX, int startY, int endX, int endY, int& moveCounter, int size, char** board, char*** history)
 {
 	if (isValidMove(startX, startY, endX, endY, moveCounter, size, board))
 	{
@@ -425,12 +453,12 @@ void makeMove(int startX, int startY, int endX, int endY, int& moveCounter, int 
 		board[startX][startY] = EMPTY;
 		board[endX][endY] = piece;
 		cout << "Moved piece from (" << startX + 1 << ", " << startY + 1 << ") to (" << endX + 1 << ", " << endY + 1 << ")." << endl;
-		checkCapture(endX, endY, piece, size, board);
+		checkCapture(endX, endY, piece, size, board, history);
 		moveCounter++;
 		if (piece == KING && isCorner(endX, endY, size))
 		{
 			cout << "The king has reached a corner!" << endl << "Defenders Win!!!\n";
-			exit(0);
+			quitGame(size, board, history);
 		}
 	}
 	else
@@ -643,7 +671,7 @@ int main()
 
 	char** board = createBoard(size);//delete later
 	char*** history = createHistory(size);//delete later
-	
+
 	initializeBoard(size, board);
 	printBoard(size, board);
 
@@ -664,7 +692,7 @@ int main()
 			int startX, startY, endX, endY;
 			if (cin >> startX >> startY >> endX >> endY)
 			{
-				makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter, size, board);
+				makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter, size, board, history);
 				addCurrentBoardToHistory(board, history, moveCounter, size);
 				printBoard(size, board);
 			}
