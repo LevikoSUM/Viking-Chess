@@ -263,22 +263,26 @@ void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** boa
 
 	if (targetRow > 0 &&board[targetRow - 1][targetCol] == KING && isKingCaptured(targetRow - 1, targetCol, size, board))
 	{
-		cout << "The King was aptured!" << endl << "Attackers Win!!!";
+		printBoard(size, board);
+		cout << "The King was captured!" << endl << "Attackers Win!!!";
 		exit(0);
 	}
 	else if (targetCol > 0 && board[targetRow][targetCol - 1] == KING && isKingCaptured(targetRow, targetCol - 1, size, board))
 	{
-		cout << "The King was aptured!" << endl << "Attackers Win!!!";
+		printBoard(size, board);
+		cout << "The King was captured!" << endl << "Attackers Win!!!";
 		exit(0);
 	}
 	else if (targetRow < size - 1 && board[targetRow + 1][targetCol] == KING && isKingCaptured(targetRow + 1, targetCol, size, board))
 	{
-		cout << "The King was aptured!" << endl << "Attackers Win!!!";
+		printBoard(size, board);
+		cout << "The King was captured!" << endl << "Attackers Win!!!";
 		exit(0);
 	}
 	else if (targetCol < size - 1 && board[targetRow][targetCol + 1] == KING && isKingCaptured(targetRow, targetCol + 1, size, board))
 	{
-		cout << "The King was aptured!" << endl << "Attackers Win!!!";
+		printBoard(size, board);
+		cout << "The King was captured!" << endl << "Attackers Win!!!";
 		exit(0);
 	}
 }
