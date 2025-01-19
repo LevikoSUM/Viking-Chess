@@ -368,7 +368,8 @@ void checkCapture(int targetRow, int targetCol, char pieceMoved, int size, char*
 
 bool isValidMove(int startX, int startY, int endX, int endY, int& moveCounter, int size, char** board)
 {
-	if (endX < 0 || endX >= size || endY < 0 || endY >= size) return false; // Out of bounds
+	if (endX < 0 || endX >= size || endY < 0 || endY >= size) return false; // Out of bounds (moving out of board)
+	if (startX < 0 || startX >= size || startY < 0 || startY >= size) return false; // Out of bounds (selecting outside the board)
 	if (board[endX][endY] != EMPTY && (board[startX][startY] == ATTACKER_PIECE || board[startX][startY] == DEFENDER_PIECE)) return false; // Destination not empty
 	if (board[startX][startY] == KING && (board[endX][endY] == ATTACKER_PIECE || board[endX][endY] == DEFENDER_PIECE)) return false; // Destination not empty, but for the king (because only he can be on corners)
 	if (board[startX][startY] == EMPTY || board[startX][startY] == CORNER) return false; // Not a piece
