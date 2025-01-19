@@ -11,6 +11,11 @@ const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A', 
 //const int BOARD_SIZE_LARGE = 13;
 //char board[11][11];
 //char history[1024][11][11];
+void clearInputBuffer()
+{
+	cin.clear();
+	while (cin.get() != '\n');
+}
 
 void initializeBoard(int size, char** board)
 {
@@ -469,25 +474,6 @@ void addCurrentBoardToHistory(char** board, char*** history, int moveCounter, in
 	}
 }
 
-//int chooseBoard(int size)
-//{
-//	if (size == 7)
-//	{
-//		return 1;
-//	}
-//	else if (size == 9)
-//	{
-//		return 2;
-//	}
-//	else if (size == 11)
-//	{
-//		return 3;
-//	}
-//	else if (size == 13)
-//	{
-//		return 4;
-//	}
-//}
 
 void printBoardSelectionScreen()
 {
@@ -500,24 +486,24 @@ void printBoardSelectionScreen()
 
 void selectBoard(int& size)
 {
-	char option;
+	int option;
 	cin >> option;
-	if (option == '1')
+	if (option == 1)
 	{
 		size = 7;
 		return;
 	}
-	if (option == '2')
+	if (option == 2)
 	{
 		size = 9;
 		return;
 	}
-	if (option == '3')
+	if (option == 3)
 	{
 		size = 11;
 		return;
 	}
-	if (option == '4')
+	if (option == 4)
 	{
 		size = 13;
 		return;
@@ -525,6 +511,7 @@ void selectBoard(int& size)
 	else
 	{
 		cout << "Invalid input\n";
+		clearInputBuffer();
 		selectBoard(size);
 	}
 }
@@ -539,20 +526,21 @@ void printMenu()
 
 void selectMenuOption(int &size)
 {
-	char option;
+	int option;
 	cin >> option;
-	if (option == '1')
+	if (option == 1)
 	{
 		printBoardSelectionScreen();
 		selectBoard(size);
 	}
-	else if (option == '2')
+	else if (option == 2)
 	{
 		exit(0);
 	}
 	else
 	{
 		cout << "Invalid input\n";
+		clearInputBuffer();
 		selectMenuOption(size);
 	}
 }
@@ -645,12 +633,6 @@ bool compareCommand(const char command[], const char expected[])
 		}
 	}
 	return command[4] == '\0';
-}
-
-void clearInputBuffer() 
-{
-	cin.clear();              
-	while (cin.get() != '\n'); 
 }
 
 int main()
