@@ -581,6 +581,53 @@ char*** createHistory(int size)
 	return history;
 }
 
+int findAttackersPiecesCount(char** board, int size)
+{
+	int count = 0;
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			if (board[i][j] == ATTACKER_PIECE)
+			{
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+int findDefendersPiecesCount(char** board, int size)
+{
+	int count = 0;
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			if (board[i][j] == DEFENDER_PIECE || board[i][j] == KING)
+			{
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+void printInfo(int moveCounter, char** board, int size, int defendersPiecesCountMax, int attackersPiecesCountMax)
+{
+	int defendersPiecesCount = findDefendersPiecesCount(board, size);
+	int attackersPiecesCount = findAttackersPiecesCount(board, size);
+	int capturedDefendersPieces = defendersPiecesCountMax - defendersPiecesCount;
+	int capturedAttackersPieces = attackersPiecesCountMax - attackersPiecesCount;
+
+	cout << "The current turn is " << moveCounter + 1 << endl;
+	cout << (moveCounter % 2 == 1 ? "It's defenders turn" : "It's attackers turn") << endl;
+	cout << "Defenders pieces: " << defendersPiecesCount << endl;
+	cout << "The defenders have captured " << capturedAttackersPieces << " pieces" << endl;
+	cout << "Attackers pieces: " << attackersPiecesCount << endl;
+	cout << "The attackers have captured " << capturedDefendersPieces << " pieces" << endl;
+}
+
 int main()
 {
 	printMenu();
@@ -596,7 +643,10 @@ int main()
 	int moveCounter = 0;
 	addCurrentBoardToHistory(board, history, moveCounter, size);
 
-	char command[10];
+	int defendersPiecesCountMax= findDefendersPiecesCount(board, size);
+	int attackersPiecesCountMax = findAttackersPiecesCount(board, size);
+
+	char command[4];
 	while (true)
 	{
 		cout << "> ";
@@ -614,6 +664,10 @@ int main()
 		{
 			undoMove(board, history, moveCounter, size);
 			printBoard(size, board);
+		}
+		else if (command[0] == 'i' && command[1] == 'n' && command[2] == 'f' && command[3] == 'o')
+		{
+			printInfo(moveCounter, board, size, defendersPiecesCountMax, attackersPiecesCountMax);
 		}
 	}
 }
