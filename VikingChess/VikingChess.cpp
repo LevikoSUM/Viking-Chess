@@ -647,6 +647,12 @@ bool compareCommand(const char command[], const char expected[])
 	return command[4] == '\0';
 }
 
+void clearInputBuffer() 
+{
+	cin.clear();              
+	while (cin.get() != '\n'); 
+}
+
 int main()
 {
 	printMenu();
@@ -674,10 +680,17 @@ int main()
 		if (compareCommand(command, "move"))
 		{
 			int startX, startY, endX, endY;
-			cin >> startX >> startY >> endX >> endY;
-			makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter, size, board);
-			addCurrentBoardToHistory(board, history, moveCounter, size);
-			printBoard(size, board);
+			if (cin >> startX >> startY >> endX >> endY)
+			{
+				makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter, size, board);
+				addCurrentBoardToHistory(board, history, moveCounter, size);
+				printBoard(size, board);
+			}
+			else
+			{
+				cout << "Invalid input. Please enter four numbers for the move command.\n";
+				clearInputBuffer();
+			}
 		}
 		else if (compareCommand(command, "back"))
 		{
@@ -695,6 +708,7 @@ int main()
 		else
 		{
 			cout << "Invalid command. You can write \"help\" to see available commands\n";
+			clearInputBuffer();
 		}
 	}
 }
