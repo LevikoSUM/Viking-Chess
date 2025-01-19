@@ -3,42 +3,43 @@
 
 #include <iostream>
 #include "constants.h"
+#include "utility.h"
 using namespace std;
 
 //const char EMPTY = ' ', KING = 'K', DEFENDER_PIECE = 'D', ATTACKER_PIECE = 'A', CORNER = 'X';
-void clearInputBuffer()
-{
-	cin.clear();
-	while (cin.get() != '\n');
-}
-
-void deleteBoard(char** board, int size)
-{
-	for (int i = 0; i < size; i++)
-	{
-		delete[] board[i];
-	}
-	delete[] board;
-}
-
-void deleteHistory(char*** history, int size)
-{
-	for (int i = 0; i < 1024; i++)
-	{
-		for (int j = 0; j < size; j++)
-		{
-			delete[] history[i][j];
-		}
-		delete[] history[i];
-	}
-	delete[] history;
-}
-void quitGame(int size, char** board, char*** history)
-{
-	deleteBoard(board, size);
-	deleteHistory(history, size);
-	exit(0);
-}
+//void clearInputBuffer()
+//{
+//	cin.clear();
+//	while (cin.get() != '\n');
+//}
+//
+//void deleteBoard(char** board, int size)
+//{
+//	for (int i = 0; i < size; i++)
+//	{
+//		delete[] board[i];
+//	}
+//	delete[] board;
+//}
+//
+//void deleteHistory(char*** history, int size)
+//{
+//	for (int i = 0; i < 1024; i++)
+//	{
+//		for (int j = 0; j < size; j++)
+//		{
+//			delete[] history[i][j];
+//		}
+//		delete[] history[i];
+//	}
+//	delete[] history;
+//}
+//void quitGame(int size, char** board, char*** history)
+//{
+//	deleteBoard(board, size);
+//	deleteHistory(history, size);
+//	exit(0);
+//}
 
 void initializeBoard(int size, char** board)
 {
