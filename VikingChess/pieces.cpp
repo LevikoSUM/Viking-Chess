@@ -35,33 +35,46 @@ bool isKingCaptured(int targetRow, int targetCol, int size, char** board)
 	{
 		sidesToCapture = 4;
 	}
-	if (board[targetRow - 1][targetCol] == ATTACKER_PIECE ||
-		isCorner(targetRow - 1, targetCol, size) ||
-		isThrone(targetRow - 1, targetCol, size))
+	if (targetRow > 1)
 	{
-		sidesSurrounded++;
-	}
-	if (board[targetRow][targetCol - 1] == ATTACKER_PIECE ||
-		isCorner(targetRow, targetCol - 1, size) ||
-		isThrone(targetRow, targetCol - 1, size))
-	{
-		sidesSurrounded++;
-	}
-	if (board[targetRow + 1][targetCol] == ATTACKER_PIECE ||
-		isCorner(targetRow + 1, targetCol, size) ||
-		isThrone(targetRow + 1, targetCol, size))
-	{
-		sidesSurrounded++;
-		if (sidesSurrounded == sidesToCapture)
+
+		if (board[targetRow - 1][targetCol] == ATTACKER_PIECE ||
+			isCorner(targetRow - 1, targetCol, size) ||
+			isThrone(targetRow - 1, targetCol, size))
 		{
-			return true;
+			sidesSurrounded++;
 		}
 	}
-	if (board[targetRow][targetCol + 1] == ATTACKER_PIECE ||
-		isCorner(targetRow, targetCol + 1, size) ||
-		isThrone(targetRow, targetCol + 1, size))
+	if (targetCol > 1)
 	{
-		sidesSurrounded++;
+		if (board[targetRow][targetCol - 1] == ATTACKER_PIECE ||
+			isCorner(targetRow, targetCol - 1, size) ||
+			isThrone(targetRow, targetCol - 1, size))
+		{
+			sidesSurrounded++;
+		}
+	}
+	if (targetRow < size - 1)
+	{
+		if (board[targetRow + 1][targetCol] == ATTACKER_PIECE ||
+			isCorner(targetRow + 1, targetCol, size) ||
+			isThrone(targetRow + 1, targetCol, size))
+		{
+			sidesSurrounded++;
+			if (sidesSurrounded == sidesToCapture)
+			{
+				return true;
+			}
+		}
+	}
+	if (targetCol < size - 1)
+	{
+		if (board[targetRow][targetCol + 1] == ATTACKER_PIECE ||
+			isCorner(targetRow, targetCol + 1, size) ||
+			isThrone(targetRow, targetCol + 1, size))
+		{
+			sidesSurrounded++;
+		}
 	}
 	if (sidesSurrounded == sidesToCapture)
 	{
