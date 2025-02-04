@@ -152,7 +152,7 @@ void printInfo(int moveCounter, char** board, int size, int defendersPiecesCount
 
 void printHelp()
 {
-	cout << "move <number1> <number2> <number3> <number4> : move a piece  from (number1,number2) to (number3,number4) if possible.\n";
+	cout << "move <coordinates1> <coordinates2> : move a piece from (coordinates1) to (coordinates2) if possible.\n";
 	cout << "back : undo the last turn made.\n";
 	cout << "info : get information about the current board state.\n";
 }
@@ -255,7 +255,7 @@ int main()
 			}
 			else
 			{
-				cout << "Invalid input. Please enter four numbers for the move command.\n";
+				cout << "Invalid input. Use \"help\" command to see correct use of \"move\".\n";
 				clearInputBuffer();
 			}
 		}
