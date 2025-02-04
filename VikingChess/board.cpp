@@ -162,7 +162,7 @@ void printBoard(int size, char** board)
 
 
 	cout << "    ";
-	for (int j = 0; j < size; j++)
+	for (int i = 0; i < size; i++)
 	{
 		cout << "+-------";
 	}
@@ -170,16 +170,10 @@ void printBoard(int size, char** board)
 
 
 	cout << "    ";
-	for (int j = 0; j < size; j++)
+	for (int i = 0; i < size; i++)
 	{
-		if (j + 1 < 10)
-		{
-			cout << "    " << j + 1 << "   ";
-		}
-		else
-		{
-			cout << "   " << j + 1 << "   ";
-		}
+		char letter = 'A' + i;
+		cout << "    " << letter << "   ";
 	}
 	cout << endl;
 }
