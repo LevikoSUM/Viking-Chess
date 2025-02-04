@@ -103,7 +103,8 @@ void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** boa
 			isThrone(targetRow - 2, targetCol, size)))
 	{
 		board[targetRow - 1][targetCol] = EMPTY;
-		cout << "Captured piece at (" << targetRow - 1 << ", " << targetCol << ")\n";
+		char letterCol = targetCol + 'a';
+		cout << "Captured piece at " << letterCol << targetRow << endl;
 	}
 
 	// left
@@ -113,7 +114,8 @@ void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** boa
 			isThrone(targetRow, targetCol - 2, size)))
 	{
 		board[targetRow][targetCol - 1] = EMPTY;
-		cout << "Captured piece at (" << targetRow << ", " << targetCol - 1 << ")\n";
+		char letterCol = targetCol - 1 + 'a';
+		cout << "Captured piece at " << letterCol << targetRow + 1 << endl;
 	}
 
 	// down
@@ -123,7 +125,8 @@ void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** boa
 			isThrone(targetRow + 2, targetCol, size)))
 	{
 		board[targetRow + 1][targetCol] = EMPTY;
-		cout << "Captured piece at (" << targetRow + 1 << ", " << targetCol << ")\n";
+		char letterCol = targetCol + 'a';
+		cout << "Captured piece at " << letterCol << targetRow + 2 << endl;
 	}
 
 	// right
@@ -133,7 +136,8 @@ void checkCaptureForAttackers(int targetRow, int targetCol, int size, char** boa
 			isThrone(targetRow, targetCol + 2, size)))
 	{
 		board[targetRow][targetCol + 1] = EMPTY;
-		cout << "Captured piece at (" << targetRow << ", " << targetCol + 1 << ")\n";
+		char letterCol = targetCol + 1 + 'a';
+		cout << "Captured piece at " << letterCol << targetRow + 1 << endl;
 	}
 
 	if (targetRow > 0 && board[targetRow - 1][targetCol] == KING && isKingCaptured(targetRow - 1, targetCol, size, board))
@@ -172,7 +176,8 @@ void checkCaptureForDefenders(int targetRow, int targetCol, int size, char** boa
 			isThrone(targetRow - 2, targetCol, size)))
 	{
 		board[targetRow - 1][targetCol] = EMPTY;
-		cout << "Captured piece at (" << targetRow - 1 << ", " << targetCol << ")\n";
+		char letterCol = targetCol + 'a';
+		cout << "Captured piece at " << letterCol << targetRow << endl;
 	}
 
 	// left
@@ -183,7 +188,8 @@ void checkCaptureForDefenders(int targetRow, int targetCol, int size, char** boa
 			isThrone(targetRow, targetCol - 2, size)))
 	{
 		board[targetRow][targetCol - 1] = EMPTY;
-		cout << "Captured piece at (" << targetRow << ", " << targetCol - 1 << ")\n";
+		char letterCol = targetCol - 1 + 'a';
+		cout << "Captured piece at " << letterCol << targetRow + 1 << endl;
 	}
 
 	// down
@@ -194,7 +200,8 @@ void checkCaptureForDefenders(int targetRow, int targetCol, int size, char** boa
 			isThrone(targetRow + 2, targetCol, size)))
 	{
 		board[targetRow + 1][targetCol] = EMPTY;
-		cout << "Captured piece at (" << targetRow + 1 << ", " << targetCol << ")\n";
+		char letterCol = targetCol + 'a';
+		cout << "Captured piece at " << letterCol << targetRow + 2 << endl;
 	}
 
 	// right
@@ -205,7 +212,8 @@ void checkCaptureForDefenders(int targetRow, int targetCol, int size, char** boa
 			isThrone(targetRow, targetCol + 2, size)))
 	{
 		board[targetRow][targetCol + 1] = EMPTY;
-		cout << "Captured piece at (" << targetRow << ", " << targetCol + 1 << ")\n";
+		char letterCol = targetCol + 1 + 'a';
+		cout << "Captured piece at " << letterCol << targetRow + 1 << endl;
 	}
 }
 
@@ -255,7 +263,9 @@ void makeMove(int startX, int startY, int endX, int endY, int& moveCounter, int 
 		char piece = board[startX][startY];
 		board[startX][startY] = EMPTY;
 		board[endX][endY] = piece;
-		cout << "Moved piece from (" << startX + 1 << ", " << startY + 1 << ") to (" << endX + 1 << ", " << endY + 1 << ")." << endl;
+		char startYLetter = startY + 'a';
+		char endYLetter = endY + 'a';
+		cout << "Moved piece from " << startYLetter << startX + 1 << " to " << endYLetter << endX + 1 << endl;
 		checkCapture(endX, endY, piece, size, board, history);
 		moveCounter++;
 		if (piece == KING && isCorner(endX, endY, size))
