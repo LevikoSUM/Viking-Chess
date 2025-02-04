@@ -1,4 +1,5 @@
 #include "utility.h"
+#include "constants.h"
 #include <iostream>
 using namespace std;
 
@@ -19,7 +20,7 @@ void deleteBoard(char** board, int size)
 
 void deleteHistory(char*** history, int size)
 {
-	for (int i = 0; i < 1024; i++)
+	for (int i = 0; i < MAX_HISTORY_SIZE; i++)
 	{
 		for (int j = 0; j < size; j++)
 		{

@@ -91,8 +91,8 @@ char** createBoard(int size)
 
 char*** createHistory(int size)
 {
-	char*** history = new char** [1024];
-	for (int i = 0; i < 1024; i++)
+	char*** history = new char** [MAX_HISTORY_SIZE];
+	for (int i = 0; i < MAX_HISTORY_SIZE; i++)
 	{
 		history[i] = new char* [size];
 		for (int j = 0; j < size; j++)
