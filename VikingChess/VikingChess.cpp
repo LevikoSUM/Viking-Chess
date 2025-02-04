@@ -254,13 +254,17 @@ int main()
 
 		if (compareCommand(command, "move"))
 		{
-			cin >> startCoord >> endCoord;
+			cin >> startCoord;
 			int startX, startY, endX, endY;
-			if (parseCoordinates(startCoord, startX, startY) && parseCoordinates(endCoord, endX, endY))
+			if (parseCoordinates(startCoord, startX, startY))
 			{
-				makeMove(startX, startY, endX, endY, moveCounter, size, board, history);
-				addCurrentBoardToHistory(board, history, moveCounter, size);
-				printBoard(size, board);
+				cin >> endCoord;
+				if (parseCoordinates(endCoord, endX, endY))
+				{
+					makeMove(startX, startY, endX, endY, moveCounter, size, board, history);
+					addCurrentBoardToHistory(board, history, moveCounter, size);
+					printBoard(size, board);
+				}
 			}
 			else
 			{
