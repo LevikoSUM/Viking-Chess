@@ -35,7 +35,7 @@ bool isKingCaptured(int targetRow, int targetCol, int size, char** board)
 	{
 		sidesToCapture = 4;
 	}
-	if (targetRow > 1)
+	if (targetRow > 0)
 	{
 
 		if (board[targetRow - 1][targetCol] == ATTACKER_PIECE ||
@@ -45,7 +45,7 @@ bool isKingCaptured(int targetRow, int targetCol, int size, char** board)
 			sidesSurrounded++;
 		}
 	}
-	if (targetCol > 1)
+	if (targetCol > 0)
 	{
 		if (board[targetRow][targetCol - 1] == ATTACKER_PIECE ||
 			isCorner(targetRow, targetCol - 1, size) ||
