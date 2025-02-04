@@ -169,6 +169,56 @@ bool compareCommand(const char command[], const char expected[])
 	return command[4] == '\0';
 }
 
+int strLength(const char str[])
+{
+	int count = 0;
+	while (str[count] != '\0')
+	{
+		count++;
+	}
+	return count;
+}
+
+bool parseCoordinates(const char input[], int& x, int& y)
+{
+	int length = strLength(input);
+	if (length > 3 || length < 2)
+	{
+		return false;
+	}
+
+	if (input[0] >= 'a' && input[0] <= 'z')
+	{
+		y = input[0] - 'a';
+	}
+	else if (input[0] >= 'A' && input[0] <= 'Z')
+	{
+		y = input[0] - 'A';
+	}
+	else
+	{
+		return false;
+	}
+	if (input[1] < '1' || input[1] > '9')
+	{
+		return false;
+	}
+	x = input[1] - '0';
+
+	if (length == 3)
+	{
+		if (input[2] < '0' || input[2] > '9')
+		{
+			return false;
+		}
+		x = x * 10 + (input[2] - '0');
+	}
+
+	x--;
+
+	return true;
+}
+
 int main()
 {
 	printMenu();
@@ -187,7 +237,7 @@ int main()
 	int defendersPiecesCountMax= findDefendersPiecesCount(board, size);
 	int attackersPiecesCountMax = findAttackersPiecesCount(board, size);
 
-	char command[4];
+	char command[4], startCoord[4], endCoord[4];;
 	while (true)
 	{
 		cout << "> ";
@@ -195,10 +245,11 @@ int main()
 
 		if (compareCommand(command, "move"))
 		{
+			cin >> startCoord >> endCoord;
 			int startX, startY, endX, endY;
-			if (cin >> startX >> startY >> endX >> endY)
+			if (parseCoordinates(startCoord, startX, startY) && parseCoordinates(endCoord, endX, endY))
 			{
-				makeMove(startX - 1, startY - 1, endX - 1, endY - 1, moveCounter, size, board, history);
+				makeMove(startX, startY, endX, endY, moveCounter, size, board, history);
 				addCurrentBoardToHistory(board, history, moveCounter, size);
 				printBoard(size, board);
 			}
