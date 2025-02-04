@@ -58,7 +58,7 @@ void printMenu()
 	cout << "2. Quit\n";
 }
 
-void selectMenuOption(int &size)
+void selectMenuOption(int& size)
 {
 	int option;
 	cin >> option;
@@ -79,10 +79,10 @@ void selectMenuOption(int &size)
 	}
 }
 
-char** createBoard(int size) 
+char** createBoard(int size)
 {
-	char** board = new char*[size];
-	for (int i = 0; i < size; i++) 
+	char** board = new char* [size];
+	for (int i = 0; i < size; i++)
 	{
 		board[i] = new char[size];
 	}
@@ -91,7 +91,7 @@ char** createBoard(int size)
 
 char*** createHistory(int size)
 {
-	char*** history = new char**[1024];
+	char*** history = new char** [1024];
 	for (int i = 0; i < 1024; i++)
 	{
 		history[i] = new char* [size];
@@ -157,13 +157,13 @@ void printHelp()
 	cout << "info : get information about the current board state.\n";
 }
 
-bool compareCommand(const char command[], const char expected[]) 
+bool compareCommand(const char command[], const char expected[])
 {
-	for (int i = 0; i < 4; i++) 
+	for (int i = 0; i < 4; i++)
 	{
-		if (command[i] != expected[i]) 
+		if (command[i] != expected[i])
 		{
-			return false; 
+			return false;
 		}
 	}
 	return command[4] == '\0';
@@ -234,7 +234,7 @@ int main()
 	int moveCounter = 0;
 	addCurrentBoardToHistory(board, history, moveCounter, size);
 
-	int defendersPiecesCountMax= findDefendersPiecesCount(board, size);
+	int defendersPiecesCountMax = findDefendersPiecesCount(board, size);
 	int attackersPiecesCountMax = findAttackersPiecesCount(board, size);
 
 	char command[4], startCoord[4], endCoord[4];;
